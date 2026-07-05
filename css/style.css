@@ -1,0 +1,667 @@
+/* ============================================================================
+   FILE INI: css/style.css
+   ============================================================================
+   Ini adalah file tampilan (desain) website. Kamu TIDAK WAJIB mengedit file
+   ini. Untuk mengubah warna, cukup edit js/config.js bagian THEME - warna di
+   sana otomatis diterapkan ke seluruh website lewat script.js.
+
+   Kalau kamu ingin mengubah bentuk/layout (bukan cuma warna), baru file ini
+   perlu disentuh. Setiap bagian sudah diberi komentar penjelasan.
+   ============================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* --- Variabel warna default (akan ditimpa otomatis oleh script.js sesuai config.js) --- */
+:root {
+  --bg: #0c0a09;
+  --bg-alt: #161210;
+  --orange: #f97316;
+  --red: #dc2626;
+  --gold: #facc15;
+  --text: #f5f1ea;
+  --text-muted: #a89f94;
+  --border: #2a231f;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.pixel-font { font-family: 'Press Start 2P', monospace; }
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; }
+img { max-width: 100%; display: block; }
+
+::selection { background: var(--orange); color: #000; }
+
+/* Fokus keyboard yang jelas (aksesibilitas) */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* ==========================================================================
+   LAYAR FORM AWAL (platform + nickname)
+   ========================================================================== */
+.gate-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 30%, #1a1310 0%, var(--bg) 70%);
+  padding: 20px;
+}
+
+.gate-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--bg-alt);
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  padding: 36px 28px;
+  position: relative;
+  box-shadow: 0 0 0 1px rgba(249,115,22,0.08), 0 30px 60px -20px rgba(0,0,0,0.7);
+}
+
+.gate-card::before {
+  content: "";
+  position: absolute;
+  top: -2px; left: -2px; right: -2px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--orange), var(--red), var(--gold));
+}
+
+.gate-logo {
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 18px;
+  display: block;
+  filter: drop-shadow(0 0 18px rgba(249,115,22,0.45));
+}
+
+.gate-title {
+  text-align: center;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.gate-sub {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13.5px;
+  margin-bottom: 26px;
+}
+
+.field-group { margin-bottom: 18px; }
+
+.field-label {
+  display: block;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.platform-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.platform-btn {
+  background: #1e1815;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-muted);
+  padding: 12px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: border-color .15s, color .15s, background .15s;
+}
+
+.platform-btn span.emoji { font-size: 16px; }
+
+.platform-btn.active {
+  border-color: var(--orange);
+  color: var(--text);
+  background: linear-gradient(180deg, rgba(249,115,22,0.14), rgba(249,115,22,0.03));
+}
+
+.nick-input-wrap { position: relative; }
+
+.nick-prefix {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold);
+  font-weight: 700;
+  pointer-events: none;
+  display: none;
+}
+
+.nick-prefix.show { display: block; }
+
+#nickname {
+  width: 100%;
+  background: #1e1815;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  padding: 12px 14px;
+  padding-left: 14px;
+  font-size: 14px;
+  transition: border-color .15s;
+}
+
+#nickname.has-prefix { padding-left: 26px; }
+
+#nickname:focus { border-color: var(--orange); }
+
+.nick-status {
+  margin-top: 8px;
+  font-size: 12.5px;
+  min-height: 16px;
+}
+
+.nick-status.ok { color: #4ade80; }
+.nick-status.err { color: #f87171; }
+.nick-status.info { color: var(--text-muted); }
+
+.avatar-preview {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: #1e1815;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.avatar-preview.show { display: flex; }
+
+.avatar-preview img {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  border-radius: 3px;
+}
+
+.btn-primary {
+  width: 100%;
+  background: linear-gradient(90deg, var(--orange), var(--red));
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 13px;
+  border-radius: 4px;
+  margin-top: 8px;
+  letter-spacing: 0.3px;
+  transition: transform .12s, filter .12s;
+}
+
+.btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+.gate-note {
+  margin-top: 16px;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   HEADER / NAVBAR
+   ========================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(12,10,9,0.88);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand img { width: 34px; height: 34px; }
+.brand-name { font-size: 13px; font-weight: 700; letter-spacing: 0.3px; }
+.brand-tag { font-size: 10.5px; color: var(--text-muted); }
+
+.player-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  padding: 6px 12px 6px 6px;
+  border-radius: 20px;
+  font-size: 12.5px;
+}
+
+.player-chip img { width: 22px; height: 22px; border-radius: 4px; image-rendering: pixelated; }
+.player-chip .platform-badge { color: var(--gold); font-size: 10.5px; }
+
+/* ==========================================================================
+   LOBBY UTAMA (3 pintu: Credits / Rank / Staff)
+   ========================================================================== */
+.hero {
+  position: relative;
+  padding: 70px 20px 40px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.ember {
+  position: absolute;
+  bottom: -10px;
+  width: 4px;
+  height: 4px;
+  background: var(--orange);
+  border-radius: 1px;
+  opacity: 0.8;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  0%   { transform: translateY(0) translateX(0); opacity: 0.9; }
+  100% { transform: translateY(-420px) translateX(var(--drift, 20px)); opacity: 0; }
+}
+
+.hero-eyebrow {
+  font-size: 10.5px;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+
+.hero h1 {
+  font-size: clamp(26px, 5vw, 42px);
+  font-weight: 800;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero h1 .accent {
+  background: linear-gradient(90deg, var(--gold), var(--orange), var(--red));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero p {
+  color: var(--text-muted);
+  max-width: 520px;
+  margin: 0 auto;
+  font-size: 14.5px;
+  position: relative;
+  z-index: 2;
+}
+
+.lobby-grid {
+  max-width: 1000px;
+  margin: 44px auto 80px;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 760px) {
+  .lobby-grid { grid-template-columns: 1fr; }
+}
+
+.lobby-door {
+  background: var(--bg-alt);
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  padding: 30px 22px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .18s, transform .18s;
+}
+
+.lobby-door:hover { border-color: var(--orange); transform: translateY(-4px); }
+
+.lobby-door .door-icon {
+  font-size: 30px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.lobby-door h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.lobby-door p {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+}
+
+.door-cta {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--orange);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lobby-door[data-door="rank"] .door-cta { color: var(--red); }
+.lobby-door[data-door="staff"] .door-cta { color: var(--gold); }
+
+/* ==========================================================================
+   PAGE CONTAINER umum (Rank shop / Credits / Staff)
+   ========================================================================== */
+.page {
+  display: none;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 40px 20px 90px;
+}
+
+.page.active { display: block; }
+
+.page-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-bottom: 22px;
+}
+.page-back:hover { color: var(--text); }
+
+.page-title {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.page-sub {
+  color: var(--text-muted);
+  font-size: 13.5px;
+  margin-bottom: 30px;
+}
+
+/* ==========================================================================
+   VOUCHER BAR
+   ========================================================================== */
+.voucher-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-bottom: 30px;
+}
+
+.voucher-bar input {
+  flex: 1;
+  min-width: 160px;
+  background: #1e1815;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 9px 12px;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.voucher-bar button {
+  background: var(--orange);
+  color: #1a0f00;
+  font-weight: 700;
+  font-size: 12.5px;
+  padding: 9px 16px;
+  border-radius: 4px;
+}
+
+.voucher-msg { width: 100%; font-size: 12px; }
+.voucher-msg.ok { color: #4ade80; }
+.voucher-msg.err { color: #f87171; }
+
+/* ==========================================================================
+   RANK GRID + CARD
+   ========================================================================== */
+.rank-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 20px;
+}
+
+.rank-card {
+  background: var(--bg-alt);
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: border-color .18s, transform .18s;
+}
+
+.rank-card:hover { transform: translateY(-3px); }
+
+/* tepi "api" bergerigi di atas kartu -- elemen signature yang mengambil dari
+   bentuk pixel-flame pada logo */
+.rank-card .flame-edge {
+  height: 8px;
+  clip-path: polygon(0% 100%, 8% 0%, 16% 100%, 24% 0%, 32% 100%, 40% 0%, 48% 100%,
+    56% 0%, 64% 100%, 72% 0%, 80% 100%, 88% 0%, 96% 100%, 100% 0%, 100% 100%);
+}
+
+.rank-card .card-top {
+  padding: 20px 20px 14px;
+}
+
+.rank-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.rank-badge-emoji { font-size: 22px; }
+
+.rank-discount-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+  background: var(--red);
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+.rank-name {
+  font-size: 17px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.rank-price-row { display: flex; align-items: baseline; gap: 8px; margin-top: 6px; }
+.rank-price-old { font-size: 12.5px; color: var(--text-muted); text-decoration: line-through; }
+.rank-price-new { font-size: 19px; font-weight: 800; }
+
+.rank-perks {
+  padding: 0 20px;
+  margin: 10px 0 6px;
+  font-size: 12.3px;
+  color: var(--text-muted);
+  list-style: none;
+}
+.rank-perks li { padding: 3px 0; padding-left: 16px; position: relative; }
+.rank-perks li::before { content: "▸"; position: absolute; left: 0; color: var(--orange); }
+
+.rank-items-toggle {
+  margin: 4px 20px 0;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  padding: 7px 10px;
+  text-align: left;
+}
+.rank-items-toggle:hover { color: var(--text); border-color: var(--orange); }
+
+.rank-items-list {
+  display: none;
+  margin: 8px 20px 0;
+  padding: 10px;
+  background: #1a1512;
+  border-radius: 4px;
+  font-size: 12px;
+}
+.rank-items-list.show { display: block; }
+.rank-items-list .item-row { display: flex; justify-content: space-between; padding: 3px 0; color: var(--text-muted); }
+.rank-items-list .item-row span:first-child { color: var(--text); }
+
+.rank-card .card-bottom {
+  margin-top: auto;
+  padding: 16px 20px 20px;
+}
+
+.buy-btn {
+  width: 100%;
+  background: linear-gradient(90deg, var(--orange), var(--red));
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 11px;
+  border-radius: 4px;
+}
+.buy-btn:hover { filter: brightness(1.08); }
+
+/* ==========================================================================
+   CHECKOUT MODAL
+   ========================================================================== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 90;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.modal-overlay.show { display: flex; }
+
+.modal-box {
+  background: var(--bg-alt);
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  max-width: 420px;
+  width: 100%;
+  padding: 26px;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px; right: 14px;
+  background: none;
+  color: var(--text-muted);
+  font-size: 18px;
+}
+.modal-close:hover { color: var(--text); }
+
+.modal-box h3 { font-size: 17px; margin-bottom: 4px; }
+.modal-box .modal-sub { color: var(--text-muted); font-size: 12.5px; margin-bottom: 18px; }
+
+.summary-row { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+.summary-row.total { font-weight: 800; font-size: 15px; border-bottom: none; padding-top: 10px; }
+
+/* ==========================================================================
+   STAFF PAGE
+   ========================================================================== */
+.staff-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+.staff-card {
+  background: var(--bg-alt);
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  padding: 20px;
+  text-align: center;
+}
+.staff-avatar {
+  width: 52px; height: 52px;
+  border-radius: 6px;
+  margin: 0 auto 12px;
+  image-rendering: pixelated;
+  border: 2px solid var(--border);
+}
+.staff-name { font-weight: 700; font-size: 14px; }
+.staff-role { font-size: 11.5px; margin-top: 4px; font-weight: 700; letter-spacing: 0.3px; }
+
+/* ==========================================================================
+   CREDITS PAGE
+   ========================================================================== */
+.credits-list { display: flex; flex-direction: column; gap: 14px; }
+.credit-item {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px 18px;
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.credit-item strong { color: var(--text); }
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.site-footer {
+  text-align: center;
+  padding: 30px 20px;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  border-top: 1px solid var(--border);
+}
